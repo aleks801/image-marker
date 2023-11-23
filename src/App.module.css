@@ -1,0 +1,19 @@
+.content {
+  margin: 16px;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 4px;
+}

@@ -2,3 +2,15 @@
   visibility: hidden;
   position: absolute;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fl {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

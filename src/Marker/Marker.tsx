@@ -2,12 +2,15 @@ import { useState, useRef } from "react"
 import { ResultPreview } from "./ResultPreview"
 import { SourceImages } from "./SourceImages"
 import styles from "./Marker.module.css"
+import { Button, Input } from "antd"
 
 type Props = {
   imageUrls: string[]
 }
 
 export const Marker = ({ imageUrls }: Props) => {
+  console.log({ imageUrls })
+
   const [loaded, setLoaded] = useState(false)
   const [dataURL, setDataURL] = useState("")
   const [selectedImage, setSelectedImage] = useState<HTMLImageElement | null>(null)
@@ -38,14 +41,16 @@ export const Marker = ({ imageUrls }: Props) => {
   }
 
   return (
-    <div>
-      <h3>Select image</h3>
-      <SourceImages urls={imageUrls} selectedImage={selectedImage} onSelect={handleImageClick} onLoad={handleImagesLoad} />
-      <h3>Write promocode</h3>
-      <input value={promo} onChange={(e) => setPromo(e.target.value)} />
-      <button disabled={!selectedImage || !loaded} onClick={handleGenerateClick}>
+    <div className={styles.container}>
+      {/* <h3>Select image</h3> */}
+      <SourceImages urls={imageUrls} onLoad={handleImagesLoad} />
+      <div className={styles.fl}>
+        <span>Promocode: </span>
+        <Input value={promo} onChange={(e) => setPromo(e.target.value)} />
+      </div>
+      <Button disabled={!loaded} onClick={handleGenerateClick}>
         Generate
-      </button>
+      </Button>
       <h3>Result</h3>
       <canvas ref={canvasRef} id="result" className={styles.canvas} />
       <ResultPreview dataURL={dataURL} />

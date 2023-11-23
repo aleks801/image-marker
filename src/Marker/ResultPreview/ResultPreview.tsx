@@ -1,6 +1,7 @@
 import React from "react"
 import { downloadImage } from "./ResultPreview.utils"
 import styles from "./ResultPreview.module.css"
+import { Button } from "antd"
 
 type Props = {
   dataURL?: string
@@ -16,9 +17,9 @@ const ResultPreviewRaw = ({ dataURL }: Props) => {
   return (
     <div className={styles.root}>
       <img src={dataURL} />
-      <button onClick={handleDownload} disabled={!dataURL}>
+      <Button onClick={handleDownload} disabled={!dataURL}>
         Download
-      </button>
+      </Button>
     </div>
   )
 }

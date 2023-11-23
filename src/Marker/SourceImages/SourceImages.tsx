@@ -6,16 +6,18 @@ import styles from "./SourceImages.module.css"
 type Props = {
   urls: string[]
   selectedImage?: HTMLImageElement | null
-  onSelect: (image: HTMLImageElement) => void
+  // onSelect: (image: HTMLImageElement) => void
   onLoad: () => void
 }
 
-const SourceImagesRaw = ({ urls, selectedImage, onSelect, onLoad }: Props) => {
+const SourceImagesRaw = ({ urls, selectedImage, onLoad }: Props) => {
   const [images, setImages] = useState<string[]>([])
 
   useEffect(() => {
     const getImages = async () => {
       const imgs = await Promise.all(urls.map(toDataUrl))
+      console.log(imgs);
+      
       setImages(imgs)
       onLoad()
     }
@@ -30,7 +32,7 @@ const SourceImagesRaw = ({ urls, selectedImage, onSelect, onLoad }: Props) => {
           src={src}
           height={200}
           className={classNames(styles.image, { [styles.active]: selectedImage?.src === src })}
-          onClick={(e) => onSelect(e.target as HTMLImageElement)}
+          // onClick={(e) => onSelect(e.target as HTMLImageElement)}
         />
       ))}
     </div>
