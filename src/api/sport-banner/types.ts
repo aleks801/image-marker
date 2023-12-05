@@ -1,15 +1,16 @@
 import { BannerPositioning, Image, ImageResponse, Region, RegionResponseProp, StrapiResponse } from "../types"
 
-export type CasinoBanner = BannerPositioning & {
+export type SportBanner = BannerPositioning & {
   id: number
-  eventType: "general" | "aviator"
+  eventType: "general" | "events"
+  sportType: string
   name: string | null
   image: Image
   region: Region
 }
 
-export type CasinoBannerResponse = StrapiResponse<
-  CasinoBanner & {
+export type SportBannerResponse = StrapiResponse<
+  SportBanner & {
     image: ImageResponse
     region: RegionResponseProp
   }

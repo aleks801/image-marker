@@ -32,3 +32,11 @@ export type RegionResponseProp = {
 }
 
 export type RegionResponseObj = StrapiResponse<Region>
+
+export type BannerPositioning = {
+  orientation: "vertical" | "horizontal"
+  promoCodePosition: "bottomCenter" | "bottomRight"
+  promoCodeWithAngle: boolean
+}
+
+export type ImageWithPosition = BannerPositioning & Image
