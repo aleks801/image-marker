@@ -4,3 +4,8 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.canvas {
+  visibility: hidden;
+  position: absolute;
+}

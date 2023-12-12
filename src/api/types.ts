@@ -22,16 +22,16 @@ export type ImageResponse = {
   data: StrapiResponseItem<Image>
 }
 
-export type Region = {
+export type EnumType = {
   id: number
   name: string
 }
 
-export type RegionResponseProp = {
-  data: StrapiResponseItem<Region>
+export type EnumTypeResponseProp = {
+  data: StrapiResponseItem<EnumType>
 }
 
-export type RegionResponseObj = StrapiResponse<Region>
+export type EnumTypeResponseObj = StrapiResponse<EnumType>
 
 export type BannerPositioning = {
   orientation: "vertical" | "horizontal"

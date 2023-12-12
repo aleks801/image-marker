@@ -1,8 +1,3 @@
-.canvas {
-  visibility: hidden;
-  position: absolute;
-}
-
 .container {
   display: flex;
   flex-direction: column;

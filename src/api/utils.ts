@@ -1,5 +1,13 @@
 import { host } from "./const"
-import { BannerPositioning, Image, ImageResponse, ImageWithPosition } from "./types"
+import {
+  BannerPositioning,
+  EnumType,
+  EnumTypeResponseObj,
+  EnumTypeResponseProp,
+  Image,
+  ImageResponse,
+  ImageWithPosition,
+} from "./types"
 
 export const imageResponseToImage = (response: ImageResponse): Image => {
   return {
@@ -14,4 +22,12 @@ export const bannerToImage = (obj: BannerPositioning & { image: Image }): ImageW
     ...obj,
     url: host + obj.image.url,
   }
+}
+
+export const responseEnumTypeObjToEnumType = (response: EnumTypeResponseObj): EnumType[] => {
+  return response.data.map((item) => ({ id: item.id, name: item.attributes.name }))
+}
+
+export const responseEnumTypePropToEnumType = (response: EnumTypeResponseProp): EnumType => {
+  return { id: response.data.id, name: response.data.attributes.name }
 }

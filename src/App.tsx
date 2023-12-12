@@ -1,36 +1,50 @@
-import { Button, Layout, Select, Spin } from "antd"
-import { Marker } from "./Marker"
 import { useEffect, useState } from "react"
-import { getRegions } from "./api/region"
-import { Region } from "./api/types"
+import { Button, Layout, Select, Spin } from "antd"
+
+import { getRegions } from "./api/enums/regions"
+import { EnumType } from "./api/types"
 import { getCasinoBanners } from "./api/casino-banner"
 import { CasinoBanner } from "./api/casino-banner/types"
-
-import styles from "./App.module.css"
 import { SportBanner } from "./api/sport-banner/types"
 import { getSportBanners } from "./api/sport-banner"
 import { bannerToImage } from "./api/utils"
+import { getCasinoEventTypes } from "./api/enums/casinoEventTypes"
+import { getSportEventTypes } from "./api/enums/sportEventTypes"
+import { getSportTypes } from "./api/enums/sportTypes"
+
+import { Marker } from "./Marker"
+import styles from "./App.module.css"
 
 export default function App() {
   const [loading, setLoading] = useState(true)
 
-  const [regions, setRegions] = useState<Region[]>([])
+  const [regions, setRegions] = useState<EnumType[]>([])
+  const [casinoEventTypes, setCasinoEventTypes] = useState<EnumType[]>([])
+  const [sportEventTypes, setSportEventTypes] = useState<EnumType[]>([])
   const [casinoBanners, setCasinoBanners] = useState<CasinoBanner[]>([])
   const [sportBanners, setSportBanners] = useState<SportBanner[]>([])
-  const [casinoEvents, setCasinoEvents] = useState<string[]>(["general", "aviator"])
-  const [sportEvents, setSportEvents] = useState<string[]>(["general", "events"])
-  const [sportTypes, setSportTypes] = useState<string[]>(["football", "cricket"])
+  const [sportTypes, setSportTypes] = useState<EnumType[]>([])
 
   const [selectedType, setSelectedType] = useState<"casino" | "sport" | null>()
-  const [selectedCasinoEventType, setSelectedCasinoEventType] = useState<string | null>()
-  const [selectedSportEventType, setSelectedSportEventType] = useState<string | null>()
-  const [selectedSportType, setSelectedSportType] = useState<string | null>()
-  const [selectedRegion, setSelectedRegion] = useState<Region | null>()
+  const [selectedCasinoEventType, setSelectedCasinoEventType] = useState<EnumType | null>()
+  const [selectedSportEventType, setSelectedSportEventType] = useState<EnumType | null>()
+  const [selectedSportType, setSelectedSportType] = useState<EnumType | null>()
+  const [selectedRegion, setSelectedRegion] = useState<EnumType | null>()
 
   useEffect(() => {
     const getData = async () => {
-      const [_regions, _casinoBanners, _sportBanners] = await Promise.all([getRegions(), getCasinoBanners(), getSportBanners()])
+      const [_regions, _sportTypes, _sportEventTypes, _casinoEventTypes, _casinoBanners, _sportBanners] = await Promise.all([
+        getRegions(),
+        getSportTypes(),
+        getSportEventTypes(),
+        getCasinoEventTypes(),
+        getCasinoBanners(),
+        getSportBanners(),
+      ])
       setRegions(_regions)
+      setSportTypes(_sportTypes)
+      setCasinoEventTypes(_casinoEventTypes)
+      setSportEventTypes(_sportEventTypes)
       setCasinoBanners(_casinoBanners)
       setSportBanners(_sportBanners)
       setLoading(false)
@@ -46,9 +60,38 @@ export default function App() {
     setSelectedRegion(null)
   }
 
-  const banners = (selectedType === "casino" ? casinoBanners : sportBanners).map(bannerToImage)
+  console.log({ casinoBanners, sportBanners, casinoEventTypes, sportEventTypes })
+
+  let banners = []
+  if (selectedType === "casino") {
+    banners = casinoBanners
+    if (selectedCasinoEventType) {
+      banners = banners.filter((casinoBanner) => {
+        casinoBanner.eventType.id === selectedCasinoEventType.id
+      })
+    }
+  } else {
+    banners = sportBanners
+    if (selectedSportType) {
+      banners = banners.filter((sportBanner) => {
+        sportBanner.sportType.id === selectedSportType.id
+      })
+    }
+    if (selectedSportEventType) {
+      banners = banners.filter((sportBanner) => {
+        sportBanner.eventType.id === selectedSportEventType.id
+      })
+    }
+  }
+  if (selectedRegion) {
+    banners = banners.filter((casinoBanner) => {
+      casinoBanner.region.id === selectedRegion.id
+    })
+  }
+
+  const imagesWithAttrs = banners.map(bannerToImage)
   const showImages = true // selectedType && (selectedCasinoEventType || (selectedSportType && selectedSportEventType)) && selectedRegion
-  console.log({ banners })
+  console.log({ imagesWithAttrs, selectedSportEventType, selectedSportType, selectedRegion, selectedCasinoEventType })
 
   return (
     <div className="App">
@@ -71,22 +114,22 @@ export default function App() {
                   <div className={styles.buttonGroup}>
                     {sportTypes.map((sportType) => (
                       <Button
-                        type={selectedSportType === sportType ? "primary" : "default"}
+                        type={selectedSportType?.id === sportType.id ? "primary" : "default"}
                         onClick={() => setSelectedSportType(sportType)}
                       >
-                        {sportType}
+                        {sportType.name}
                       </Button>
                     ))}
                   </div>
                 )}
                 {selectedType === "sport" && selectedSportType && (
                   <div className={styles.buttonGroup}>
-                    {sportEvents.map((sportEvent) => (
+                    {sportEventTypes.map((sportEventType) => (
                       <Button
-                        type={selectedSportEventType === sportEvent ? "primary" : "default"}
-                        onClick={() => setSelectedSportEventType(sportEvent)}
+                        type={selectedSportEventType?.id === sportEventType.id ? "primary" : "default"}
+                        onClick={() => setSelectedSportEventType(sportEventType)}
                       >
-                        {sportEvent}
+                        {sportEventType.name}
                       </Button>
                     ))}
                   </div>
@@ -94,12 +137,12 @@ export default function App() {
 
                 {selectedType === "casino" && (
                   <div className={styles.buttonGroup}>
-                    {casinoEvents.map((casinoEvent) => (
+                    {casinoEventTypes.map((casinoEventType) => (
                       <Button
-                        type={selectedCasinoEventType === casinoEvent ? "primary" : "default"}
-                        onClick={() => setSelectedCasinoEventType(casinoEvent)}
+                        type={selectedCasinoEventType?.id === casinoEventType.id ? "primary" : "default"}
+                        onClick={() => setSelectedCasinoEventType(casinoEventType)}
                       >
-                        {casinoEvent}
+                        {casinoEventType.name}
                       </Button>
                     ))}
                   </div>
@@ -108,11 +151,11 @@ export default function App() {
               {selectedType && (selectedCasinoEventType || (selectedSportType && selectedSportEventType)) && (
                 <Select
                   placeholder="Select region"
-                  onChange={(region) => setSelectedRegion(region)}
+                  onChange={(region) => setSelectedRegion(regions.find((r) => r.id === region))}
                   options={regions.map((r) => ({ value: r.id, label: r.name }))}
                 ></Select>
               )}
-              {showImages && <Marker banners={banners} />}
+              {showImages && imagesWithAttrs.length && <Marker banners={imagesWithAttrs} />}
             </>
           )}
         </Layout.Content>

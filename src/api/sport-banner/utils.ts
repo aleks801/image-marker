@@ -1,5 +1,4 @@
-import { responsePropToRegion } from "../region/utils"
-import { imageResponseToImage } from "../utils"
+import { imageResponseToImage, responseEnumTypePropToEnumType } from "../utils"
 import { SportBanner, SportBannerResponse } from "./types"
 
 export const responseToSportBanner = (response: SportBannerResponse): SportBanner[] => {
@@ -7,6 +6,8 @@ export const responseToSportBanner = (response: SportBannerResponse): SportBanne
     id: item.id,
     ...item.attributes,
     image: imageResponseToImage(item.attributes.image),
-    region: responsePropToRegion(item.attributes.region),
+    region: responseEnumTypePropToEnumType(item.attributes.region),
+    eventType: responseEnumTypePropToEnumType(item.attributes.eventType),
+    sportType: responseEnumTypePropToEnumType(item.attributes.sportType),
   }))
 }
