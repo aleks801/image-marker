@@ -60,38 +60,39 @@ export default function App() {
     setSelectedRegion(null)
   }
 
-  console.log({ casinoBanners, sportBanners, casinoEventTypes, sportEventTypes })
-
   let banners = []
   if (selectedType === "casino") {
     banners = casinoBanners
     if (selectedCasinoEventType) {
-      banners = banners.filter((casinoBanner) => {
-        casinoBanner.eventType.id === selectedCasinoEventType.id
-      })
+      banners = banners.filter((casinoBanner) => casinoBanner.eventType?.id === selectedCasinoEventType.id)
     }
   } else {
     banners = sportBanners
     if (selectedSportType) {
-      banners = banners.filter((sportBanner) => {
-        sportBanner.sportType.id === selectedSportType.id
-      })
+      console.log(selectedSportType, banners)
+
+      banners = banners.filter((sportBanner) => sportBanner.sportType?.id === selectedSportType.id)
+      console.log(banners)
     }
     if (selectedSportEventType) {
-      banners = banners.filter((sportBanner) => {
-        sportBanner.eventType.id === selectedSportEventType.id
-      })
+      banners = banners.filter((sportBanner) => sportBanner.eventType?.id === selectedSportEventType.id)
     }
   }
   if (selectedRegion) {
-    banners = banners.filter((casinoBanner) => {
-      casinoBanner.region.id === selectedRegion.id
-    })
+    banners = banners.filter((casinoBanner) => casinoBanner.region?.id === selectedRegion.id)
   }
 
   const imagesWithAttrs = banners.map(bannerToImage)
   const showImages = true // selectedType && (selectedCasinoEventType || (selectedSportType && selectedSportEventType)) && selectedRegion
-  console.log({ imagesWithAttrs, selectedSportEventType, selectedSportType, selectedRegion, selectedCasinoEventType })
+  console.log({
+    casinoBanners,
+    sportBanners,
+    imagesWithAttrs,
+    selectedSportEventType,
+    selectedSportType,
+    selectedRegion,
+    selectedCasinoEventType,
+  })
 
   return (
     <div className="App">
@@ -155,7 +156,7 @@ export default function App() {
                   options={regions.map((r) => ({ value: r.id, label: r.name }))}
                 ></Select>
               )}
-              {showImages && imagesWithAttrs.length && <Marker banners={imagesWithAttrs} />}
+              {imagesWithAttrs.length > 10 ? <>More than 10</> : <Marker banners={imagesWithAttrs} />}
             </>
           )}
         </Layout.Content>

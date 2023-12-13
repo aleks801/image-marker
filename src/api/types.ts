@@ -28,7 +28,7 @@ export type EnumType = {
 }
 
 export type EnumTypeResponseProp = {
-  data: StrapiResponseItem<EnumType>
+  data: StrapiResponseItem<EnumType> | null
 }
 
 export type EnumTypeResponseObj = StrapiResponse<EnumType>

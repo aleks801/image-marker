@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react"
-import classNames from "classnames"
+import { useEffect, useState } from "react"
 import { toDataUrl } from "./SourceImages.utils"
 import styles from "./SourceImages.module.css"
 
 type Props = {
   urls: string[]
   selectedImage?: HTMLImageElement | null
-  // onSelect: (image: HTMLImageElement) => void
   onLoad: (imgs: HTMLImageElement[]) => void
 }
 
-const SourceImagesRaw = ({ urls, selectedImage, onLoad }: Props) => {
+export const SourceImages = ({ urls, onLoad }: Props) => {
   const [images, setImages] = useState<string[]>([])
   const [imagesRefs, setImagesRefs] = useState<HTMLImageElement[]>(new Array(urls.length).fill(null))
 
   useEffect(() => {
     const getImages = async () => {
       const imgs = await Promise.all(urls.map(toDataUrl))
-      console.log(imgs)
-
       setImages(imgs)
     }
     getImages()
-  }, [])
+  }, [urls])
 
   useEffect(() => {
     if (imagesRefs.filter((e) => e).length === urls.length) {
@@ -37,7 +33,7 @@ const SourceImagesRaw = ({ urls, selectedImage, onLoad }: Props) => {
           crossOrigin="anonymous"
           src={src}
           height={200}
-          className={classNames(styles.image, { [styles.active]: selectedImage?.src === src })}
+          className={styles.image}
           onLoad={(e) =>
             setImagesRefs((prev) => {
               const newArr = [...prev]
@@ -45,11 +41,8 @@ const SourceImagesRaw = ({ urls, selectedImage, onLoad }: Props) => {
               return newArr
             })
           }
-          // onClick={(e) => onSelect(e.target as HTMLImageElement)}
         />
       ))}
     </div>
   )
 }
-
-export const SourceImages = React.memo(SourceImagesRaw)

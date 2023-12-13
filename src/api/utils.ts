@@ -28,6 +28,9 @@ export const responseEnumTypeObjToEnumType = (response: EnumTypeResponseObj): En
   return response.data.map((item) => ({ id: item.id, name: item.attributes.name }))
 }
 
-export const responseEnumTypePropToEnumType = (response: EnumTypeResponseProp): EnumType => {
+export const responseEnumTypePropToEnumType = (response: EnumTypeResponseProp): EnumType | null => {
+  if (!response.data) {
+    return null
+  }
   return { id: response.data.id, name: response.data.attributes.name }
 }

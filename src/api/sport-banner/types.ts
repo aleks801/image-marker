@@ -2,15 +2,15 @@ import { BannerPositioning, Image, ImageResponse, EnumType, EnumTypeResponseProp
 
 export type SportBanner = BannerPositioning & {
   id: number
-  eventType: EnumType
-  sportType: EnumType
+  eventType: EnumType | null
+  sportType: EnumType | null
   name: string | null
   image: Image
-  region: EnumType
+  region: EnumType | null
 }
 
 export type SportBannerResponse = StrapiResponse<
-  SportBanner & {
+  Omit<SportBanner, "image" | "region" | "eventType" | "sportType"> & {
     image: ImageResponse
     region: EnumTypeResponseProp
     eventType: EnumTypeResponseProp

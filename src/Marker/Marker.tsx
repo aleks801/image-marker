@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ResultPreview } from "./ResultPreview"
 import { SourceImages } from "./SourceImages"
 import { Input } from "antd"
@@ -17,6 +17,10 @@ export const Marker = ({ banners }: Props) => {
     setImages(imgs)
   }
 
+  useEffect(() => {
+    setImages([])
+  }, [banners])
+
   return (
     <div className={styles.container}>
       <SourceImages urls={banners.map((b) => b.url)} onLoad={handleImagesLoad} />
@@ -26,7 +30,7 @@ export const Marker = ({ banners }: Props) => {
       </div>
       <h3>Result</h3>
       {images.map((image, index) => (
-        <ResultPreview promo={promo} image={image} name={banners[index].hash} />
+        <ResultPreview promo={promo} image={image} banner={banners[index]} />
       ))}
     </div>
   )

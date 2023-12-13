@@ -10,6 +10,7 @@ export const getSportBanners = async () => {
     const response = await axios.get<SportBannerResponse>(hostApi + path + "?populate=*")
     return responseToSportBanner(response.data)
   } catch (error) {
+    console.error(error)
     return []
   }
 }

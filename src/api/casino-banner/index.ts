@@ -10,6 +10,7 @@ export const getCasinoBanners = async () => {
     const response = await axios.get<CasinoBannerResponse>(hostApi + path + "?populate=*")
     return responseToCasinoBanner(response.data)
   } catch (error) {
+    console.error(error)
     return []
   }
 }
