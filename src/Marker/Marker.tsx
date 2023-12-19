@@ -29,9 +29,11 @@ export const Marker = ({ banners }: Props) => {
         <Input value={promo} onChange={(e) => setPromo(e.target.value)} />
       </div>
       <h3>Result</h3>
-      {images.map((image, index) => (
-        <ResultPreview promo={promo} image={image} banner={banners[index]} />
-      ))}
+      <div className={styles.results}>
+        {images.map((image, index) => (
+          <ResultPreview promo={promo} image={image} banner={banners[index]} />
+        ))}
+      </div>
     </div>
   )
 }
